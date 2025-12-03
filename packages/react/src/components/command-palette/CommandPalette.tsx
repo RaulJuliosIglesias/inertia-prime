@@ -6,7 +6,7 @@ import { useKeyboard } from "../../hooks/useKeyboard";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import { useScrollLock } from "../../hooks/useScrollLock";
 
-export interface CommandItem {
+export interface CommandItemData {
   id: string;
   label: string;
   description?: string;
@@ -23,7 +23,7 @@ export interface CommandPaletteProps {
   /** Close handler. */
   onClose: () => void;
   /** Command items. */
-  items: CommandItem[];
+  items: CommandItemData[];
   /** Placeholder text. */
   placeholder?: string;
   /** Empty state message. */
@@ -35,7 +35,7 @@ export interface CommandPaletteProps {
 interface CommandContextValue {
   search: string;
   selectedIndex: number;
-  filteredItems: CommandItem[];
+  filteredItems: CommandItemData[];
 }
 
 const CommandContext = createContext<CommandContextValue | null>(null);
@@ -68,7 +68,7 @@ export function CommandPalette({
     if (!acc[group]) acc[group] = [];
     acc[group].push(item);
     return acc;
-  }, {} as Record<string, CommandItem[]>);
+  }, {} as Record<string, CommandItemData[]>);
 
   // Keyboard navigation
   useKeyboard({
@@ -199,8 +199,8 @@ export function CommandPalette({
 }
 
 // Sub-components
-interface CommandItemComponentProps {
-  item: CommandItem;
+export interface CommandItemComponentProps {
+  item: CommandItemData;
   isSelected: boolean;
   onSelect: () => void;
   onHover: () => void;
@@ -239,6 +239,7 @@ function CommandItemComponent({ item, isSelected, onSelect, onHover }: CommandIt
 
 // Export sub-components
 export { CommandItemComponent as CommandItem };
+export type { CommandItemData as CommandItemType };
 
 // Hook to use command palette
 export function useCommandPalette() {

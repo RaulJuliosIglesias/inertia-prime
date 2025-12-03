@@ -1,12 +1,9 @@
 name: Docs
 
+# Disabled until MDX is properly configured
+# TODO: Add @next/mdx package and configure next.config.mjs
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'apps/docs/**'
-      - '.github/workflows/docs.yml'
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
   docs:

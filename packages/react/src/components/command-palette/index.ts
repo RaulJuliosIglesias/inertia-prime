@@ -5,5 +5,6 @@ export {
   CommandItem,
   useCommandPalette,
   type CommandPaletteProps,
-  type CommandItem as CommandItemType,
+  type CommandItemData,
+  type CommandItemComponentProps,
 } from "./CommandPalette";
