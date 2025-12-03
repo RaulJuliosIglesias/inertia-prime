@@ -1,0 +1,120 @@
+---
+title: "useUrlState"
+description: "Sync React state with URL query parameters."
+---
+
+# useUrlState
+
+> Status: **Planned**
+
+A low-level hook to synchronize any piece of React state with the URL.
+
+## Features
+
+- Bookmarkable/shareable state
+- Works with Inertia's history management
+- Custom serializers for complex state
+- Push or replace history modes
+
+## Basic Usage
+
+```tsx
+import { useUrlState } from '@inertia-prime/react';
+
+function SearchInput() {
+  const [search, setSearch] = useUrlState({
+    key: 'search',
+    initialState: '',
+  });
+
+  return (
+    <input
+      value={search}
+      onChange={e => setSearch(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+}
+// URL: /users?search=john
+```
+
+## Options
+
+```ts
+interface UseUrlStateOptions<TState> {
+  // Optional namespace key for this state in the URL
+  key?: string;
+
+  // Initial value when URL doesn't contain state
+  initialState: TState;
+
+  // How to update browser history
+  history?: "push" | "replace";  // default: "push"
+
+  // Custom serializer for complex state
+  serializer?: {
+    toQuery: (state: TState) => Record<string, string | number | boolean | null>;
+    fromQuery: (params: URLSearchParams) => TState;
+  };
+}
+```
+
+## Return Value
+
+```ts
+const [state, setState] = useUrlState(options);
+
+// state: TState - current value
+// setState: (value: TState | ((prev: TState) => TState)) => void
+```
+
+## Complex State Example
+
+```tsx
+interface Filters {
+  status: string;
+  dateRange: [string, string];
+}
+
+const [filters, setFilters] = useUrlState<Filters>({
+  initialState: { status: 'all', dateRange: ['', ''] },
+  serializer: {
+    toQuery: (state) => ({
+      status: state.status,
+      from: state.dateRange[0],
+      to: state.dateRange[1],
+    }),
+    fromQuery: (params) => ({
+      status: params.get('status') || 'all',
+      dateRange: [
+        params.get('from') || '',
+        params.get('to') || '',
+      ],
+    }),
+  },
+});
+// URL: /users?status=active&from=2024-01-01&to=2024-12-31
+```
+
+## History Mode
+
+```tsx
+// Push: creates new history entry (back button works)
+const [tab, setTab] = useUrlState({
+  key: 'tab',
+  initialState: 'overview',
+  history: 'push',
+});
+
+// Replace: replaces current entry (no back button)
+const [search, setSearch] = useUrlState({
+  key: 'q',
+  initialState: '',
+  history: 'replace',  // Good for search inputs
+});
+```
+
+## Related
+
+- [useInertiaTable](./use-inertia-table) - uses useUrlState internally
+- [useModal](./use-modal-hook) - URL-driven modal state

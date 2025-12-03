@@ -1,0 +1,16 @@
+{
+  "name": "inertia-prime/playground",
+  "description": "Laravel playground application for Inertia Prime.",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "laravel/framework": "^10.0 || ^11.0",
+    "inertiajs/inertia-laravel": "^0.6.0",
+    "inertia-prime/laravel": "*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}

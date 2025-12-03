@@ -1,0 +1,131 @@
+---
+title: "Table Requests"
+description: "Handle DataTable filters, sorting, and pagination in Laravel controllers."
+---
+
+# Table Requests
+
+> Status: **Planned**
+
+Server-side helpers for building table responses that work with `useInertiaTable`.
+
+## TableBuilder
+
+The `TableBuilder` class provides a fluent API for building table responses:
+
+```php
+use InertiaPrime\Support\TableBuilder;
+
+class UserController extends Controller
+{
+    public function index(Request $request)
+    {
+        $users = TableBuilder::for(User::query())
+            ->columns(['id', 'name', 'email', 'created_at'])
+            ->searchable(['name', 'email'])
+            ->defaultSort('created_at', 'desc')
+            ->applyRequest($request)
+            ->toResponse();
+
+        return Inertia::render('Users/Index', ['users' => $users]);
+    }
+}
+```
+
+### TableBuilder Methods
+
+| Method | Description |
+|--------|-------------|
+| `for($query)` | Start building from an Eloquent query |
+| `columns(array)` | Define available columns for sorting |
+| `searchable(array)` | Define columns searchable via `?search=` |
+| `defaultSort(column, direction)` | Default sort when none specified |
+| `applyRequest($request)` | Apply filters, sort, pagination from request |
+| `paginate($perPage)` | Execute query with pagination |
+| `toResponse()` | Return `InertiaTableResponse` array |
+
+## FilterParser
+
+Parse filter query parameters into a normalized structure:
+
+```php
+use InertiaPrime\Support\FilterParser;
+
+// ?filter[status]=active
+// ?filter[created_at][gte]=2024-01-01
+// ?filter[role][in][]=admin&filter[role][in][]=editor
+
+$filters = FilterParser::fromRequest($request);
+
+// Returns:
+// [
+//   'status' => 'active',
+//   'created_at' => ['operator' => 'gte', 'value' => '2024-01-01'],
+//   'role' => ['operator' => 'in', 'value' => ['admin', 'editor']],
+// ]
+```
+
+### Supported Operators
+
+| Operator | SQL Equivalent | Example |
+|----------|----------------|---------|
+| `eq` | `=` | `?filter[status]=active` |
+| `neq` | `!=` | `?filter[status][neq]=inactive` |
+| `gt` | `>` | `?filter[age][gt]=18` |
+| `gte` | `>=` | `?filter[created_at][gte]=2024-01-01` |
+| `lt` | `<` | `?filter[price][lt]=100` |
+| `lte` | `<=` | `?filter[price][lte]=100` |
+| `like` | `LIKE %val%` | `?filter[name][like]=john` |
+| `in` | `IN (...)` | `?filter[role][in][]=admin&filter[role][in][]=user` |
+| `notIn` | `NOT IN` | `?filter[status][notIn][]=archived` |
+| `between` | `BETWEEN` | `?filter[price][between][]=10&filter[price][between][]=100` |
+| `isNull` | `IS NULL` | `?filter[deleted_at][isNull]=1` |
+| `isNotNull` | `IS NOT NULL` | `?filter[verified_at][isNotNull]=1` |
+
+## Response Shape
+
+`TableBuilder::toResponse()` returns data matching the TypeScript `InertiaTableResponse<T>`:
+
+```php
+[
+    'data' => [...],  // Paginated items
+    'meta' => [
+        'pagination' => [
+            'current_page' => 1,
+            'from' => 1,
+            'last_page' => 5,
+            'path' => '/users',
+            'per_page' => 15,
+            'to' => 15,
+            'total' => 73,
+        ],
+        'sort' => [
+            'column' => 'created_at',
+            'direction' => 'desc',
+        ],
+        'filters' => [
+            'status' => 'active',
+        ],
+    ],
+    'links' => [
+        'first' => '/users?page=1',
+        'last' => '/users?page=5',
+        'prev' => null,
+        'next' => '/users?page=2',
+        'pages' => [...],
+    ],
+]
+```
+
+## Request Parameters
+
+The following query parameters are recognized by `applyRequest()`:
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `page` | Current page number | `?page=2` |
+| `per_page` | Items per page | `?per_page=25` |
+| `sort` | Column to sort by | `?sort=name` |
+| `direction` | Sort direction | `?direction=desc` |
+| `search` | Global search term | `?search=john` |
+| `filter[...]` | Column filters | `?filter[status]=active` |

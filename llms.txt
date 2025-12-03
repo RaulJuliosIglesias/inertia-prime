@@ -1,0 +1,196 @@
+Inertia Prime – AI Assistant Context
+===================================
+
+This file is for AI coding assistants helping contributors work on **Inertia Prime**, a React component library built specifically for **Laravel + Inertia.js** applications.
+
+---
+
+Project Summary
+---------------
+
+Inertia Prime is a monorepo containing:
+
+- `packages/react` – `@inertia-prime/react` (React component + hook library)
+- `packages/laravel` – `inertia-prime/laravel` (Laravel integration helpers)
+- `apps/docs` – Documentation site (MDX-based)
+- `apps/playground` – Example Laravel + Inertia + React app
+
+**Key idea:**
+
+- URL is the source of truth for UI state (filters, sorting, pagination, open modals, active tabs, etc.).
+- The server (Laravel) is the source of data and business rules.
+- React is primarily the view layer on top of server-driven state.
+
+The library aims for **Zero Config, Full Control**: sensible defaults for the 80% case, but with well-designed APIs for full customization.
+
+---
+
+Important Concepts
+------------------
+
+### URL State
+
+- Components should be able to read/write their state to the URL query string.
+- Examples of URL-managed state:
+  - Table filters (e.g. `status=active`, `search=john`)
+  - Sorting (e.g. `sort=name`, `direction=asc`)
+  - Pagination (e.g. `page=2`, `per_page=25`)
+  - Open modal or slide-over (e.g. `modal=user-123`)
+  - Active tab (e.g. `tab=billing`)
+- The **`useUrlState`** hook (once implemented) will handle the mapping between React state and query parameters.
+
+### Server-First Operations
+
+- Sorting and filtering happen in **Eloquent queries**, not on the client.
+- Components like `DataTable` should:
+  - Accept data from Inertia responses.
+  - Trigger navigation with updated query parameters when the user changes filters or sorting.
+  - Never silently re-filter or re-sort the data in the browser.
+
+### Laravel Integration
+
+The Laravel package (`packages/laravel`) will provide helpers for:
+
+- Parsing table-related query parameters from `Illuminate\Http\Request`.
+- Applying filters, sorting, and pagination to Eloquent builders.
+- Formatting paginated responses into a consistent shape that the React components expect.
+- Sending toast notifications or other UI feedback through Inertia responses.
+
+Traits and helpers (planned, not yet implemented):
+
+- `HandlesTableRequests` – Parse filter/sort/pagination params.
+- `FormatsTableResponse` – Build a standardized table response payload.
+- `SendsToastNotifications` – Attach toast metadata to Inertia responses.
+- `TableBuilder` / `FilterParser` – Fluent helpers to compose table behavior.
+
+---
+
+Component & Hook Goals
+----------------------
+
+### DataTable
+
+- Server-side sorting and filtering across multiple columns.
+- URL-synced state for search, filters, sorting, and pagination.
+- Row selection with bulk actions.
+- Column visibility toggles and (eventual) drag-and-drop reordering.
+- CSV/Excel export (triggered via backend routes).
+- Responsive behavior with mobile-friendly stacking.
+- Empty and loading states handled gracefully.
+
+### Forms
+
+- A `Form` wrapper built on top of Inertia's `useForm`.
+- Automatic binding of Laravel validation errors.
+- Dirty-state tracking and optional "unsaved changes" prompts.
+- Optimistic UI support where appropriate.
+- Transform pipelines for request payload formatting.
+
+### Overlays (Modal, SlideOver, Dropdown, Popover, Tooltip)
+
+- URL and history-aware open/close behavior where it makes sense (e.g. `Modal`, `SlideOver`).
+- Proper focus management and keyboard interaction.
+- Consider touch devices and accessibility.
+
+### Hooks Layer
+
+Headless hooks expose the behavior of components without styling:
+
+- `useInertiaTable`
+- `useInertiaForm`
+- `useUrlState`
+- `useModal`
+- `useInfiniteScroll`
+
+These should be designed so:
+
+- The hooks can be used directly in app-specific UIs.
+- The styled components in `@inertia-prime/react` act as thin opinionated layers on top of these hooks.
+
+---
+
+Styling and Theming
+--------------------
+
+- Tailwind CSS is the primary styling approach.
+- Provide **styled** components by default.
+- Also support **headless** usage: components accept `className` and/or render-prop APIs for custom styling.
+- Design tokens under `src/theme` will centralize colors, spacing, radii, typography, and animations.
+
+AI assistants should:
+
+- Prefer Tailwind utility classes for new UI examples.
+- Keep the design consistent and minimal; avoid re-inventing elaborate design systems.
+
+---
+
+Common Usage Patterns
+---------------------
+
+### 1. Server-Driven DataTable
+
+- Controller uses Laravel helpers (once implemented) to:
+  - Parse filters and sorts from the request.
+  - Apply them to an Eloquent query.
+  - Return a standardized table resource in the Inertia response.
+- React page uses `useInertiaTable` to:
+  - Read table metadata and rows from props.
+  - Expose handlers for filters, sorting, and pagination.
+  - Render `<DataTable />` with these handlers.
+
+### 2. Inertia-Aware Forms
+
+- React page calls `useInertiaForm` (wrapping Inertia's `useForm`).
+- `Form`, `TextField`, etc. components:
+  - Bind to the form state and Laravel validation errors.
+  - Show error messages next to the relevant inputs.
+  - Handle loading/disabled states while submitting.
+
+### 3. URL-Driven Modals
+
+- `useModal` syncs a modal's open/close state with a query param.
+- Opening a modal pushes a new history state.
+- Closing the modal pops or replaces state so the back button works naturally.
+
+---
+
+What AI Assistants Should Avoid
+--------------------------------
+
+- **Do not** implement real component or hook logic in library source files unless the user explicitly asks for it. This repository initially focuses on **structure and documentation**.
+- **Do not** introduce heavy additional dependencies without discussing trade-offs (e.g. multiple router libraries, CSS-in-JS on top of Tailwind).
+- **Do not** break Laravel or Inertia conventions; keep naming and behavior familiar to Laravel developers.
+
+---
+
+Troubleshooting Tips
+--------------------
+
+If something seems confusing or broken:
+
+1. **Check documentation**
+   - Look under `apps/docs/src/pages` for MDX documentation.
+   - Many sections are marked with `[TODO]` until the implementation is complete.
+
+2. **Verify URL state behavior**
+   - Ensure URL query params match expected filter/sort/page state.
+   - Confirm Inertia responses are using the right route and parameters.
+
+3. **Laravel side**
+   - Check that the request helpers and table builders are applied in controllers.
+   - Ensure pagination is performed with Laravel's paginator classes.
+
+4. **Inertia side**
+   - Confirm pages are properly registered and that props match component expectations.
+
+5. **Ask for design clarification**
+   - For ambiguous behavior (e.g. how combined filters should behave), favor patterns consistent with Laravel and popular admin panels.
+
+---
+
+When in Doubt
+-------------
+
+- Prioritize: **Laravel conventions** → **Inertia patterns** → **React ergonomics**.
+- Keep APIs small and composable.
+- Make common things easy, and advanced things possible.

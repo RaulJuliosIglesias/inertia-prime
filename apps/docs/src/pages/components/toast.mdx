@@ -1,0 +1,165 @@
+---
+title: "Toast"
+description: "Toast notifications with server-side integration for Laravel + Inertia.js."
+---
+
+# Toast
+
+> Status: **Planned**
+
+Toast notifications that can be triggered from both client and server side.
+
+## Features
+
+- Client-side toasts via `useToast()` hook
+- Server-side toasts via Laravel's `SendsToastNotifications` trait
+- Auto-dismiss with configurable duration
+- Multiple variants: success, error, warning, info
+- Action buttons
+- Stacking and positioning
+
+## Quick Start
+
+### Client-side
+
+```tsx
+import { useToast } from '@inertia-prime/react';
+
+function SaveButton() {
+  const { success, error } = useToast();
+
+  const handleSave = async () => {
+    try {
+      await saveData();
+      success('Changes saved!');
+    } catch (e) {
+      error('Failed to save', { description: 'Please try again.' });
+    }
+  };
+
+  return <button onClick={handleSave}>Save</button>;
+}
+```
+
+### Server-side (Laravel)
+
+```php
+use InertiaPrime\Traits\SendsToastNotifications;
+
+class UserController extends Controller
+{
+    use SendsToastNotifications;
+
+    public function store(Request $request)
+    {
+        User::create($request->validated());
+
+        $this->flashToast($this->successToast('User created successfully!'));
+
+        return redirect()->route('users.index');
+    }
+}
+```
+
+## Setup
+
+Wrap your app with `ToastProvider`:
+
+```tsx
+import { InertiaPrimeProvider, ToastProvider } from '@inertia-prime/react';
+
+createInertiaApp({
+  setup({ el, App, props }) {
+    createRoot(el).render(
+      <InertiaPrimeProvider>
+        <ToastProvider position="bottom-right">
+          <App {...props} />
+        </ToastProvider>
+      </InertiaPrimeProvider>
+    );
+  },
+});
+```
+
+## useToast Hook
+
+```ts
+const {
+  toasts,      // Active toasts array
+  toast,       // Show a toast with full options
+  success,     // Convenience: success variant
+  error,       // Convenience: error variant
+  warning,     // Convenience: warning variant
+  info,        // Convenience: info variant
+  dismiss,     // Dismiss by ID
+  dismissAll,  // Dismiss all toasts
+} = useToast();
+
+// Full options
+toast({
+  title: 'File uploaded',
+  description: 'Your file has been uploaded successfully.',
+  variant: 'success',
+  duration: 5000,
+  dismissible: true,
+  action: {
+    label: 'View',
+    onClick: () => router.visit('/files'),
+  },
+});
+
+// Convenience methods
+success('Saved!');
+error('Failed to save', { description: 'Check your connection.' });
+```
+
+## Toast Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `id` | `string` | auto | Unique identifier |
+| `title` | `string` | required | Main message |
+| `description` | `string` | — | Secondary text |
+| `variant` | `ToastVariant` | `"default"` | `"default"` \| `"success"` \| `"error"` \| `"warning"` \| `"info"` |
+| `duration` | `number` | `5000` | Auto-dismiss delay (ms). `0` = no auto-dismiss |
+| `dismissible` | `boolean` | `true` | Show close button |
+| `action` | `object` | — | `{ label: string, onClick: () => void }` |
+
+## ToastProvider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `position` | `ToastPosition` | `"bottom-right"` | Screen position |
+| `defaultDuration` | `number` | `5000` | Default duration for all toasts |
+| `maxToasts` | `number` | `5` | Max visible toasts |
+| `gap` | `number` | `8` | Gap between toasts (px) |
+
+### ToastPosition
+
+- `"top-left"`
+- `"top-center"`
+- `"top-right"`
+- `"bottom-left"`
+- `"bottom-center"`
+- `"bottom-right"`
+
+## Laravel Integration
+
+The `SendsToastNotifications` trait provides:
+
+```php
+// Attach to Inertia response
+$this->withToast($response, ['title' => 'Saved!', 'variant' => 'success']);
+
+// Flash for next request (redirects)
+$this->flashToast(['title' => 'Saved!', 'variant' => 'success']);
+
+// Convenience methods
+$this->successToast('User created!');
+$this->errorToast('Failed to save');
+$this->warningToast('Session expiring soon');
+$this->infoToast('New features available');
+```
+
+The `ToastProvider` automatically reads the `toast` prop from Inertia page props
+and displays server-sent toasts.

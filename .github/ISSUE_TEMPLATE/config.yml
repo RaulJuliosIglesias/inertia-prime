@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions & Discussions
+    url: https://github.com/inertia-prime/inertia-prime/discussions
+    about: Ask questions and share ideas about Inertia Prime.

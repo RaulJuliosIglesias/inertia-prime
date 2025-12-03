@@ -1,0 +1,130 @@
+---
+title: "DataTable"
+description: "Server-driven tables with URL-synced state for Laravel + Inertia.js."
+---
+
+# DataTable
+
+> Status: **Planned**
+>
+> This page documents the intended API for `DataTable`. The implementation
+> will be added in a future release.
+
+The `DataTable` component is the flagship of Inertia Prime. It embraces:
+
+- **Server-side** sorting, filtering, and pagination with Eloquent.
+- **URL-synced** state for filters, search, sorting, and pagination.
+- **Laravel paginator** integration.
+
+## Features
+
+- Server-side pagination using Laravel paginator responses.
+- Column-based sorting with multi-column support.
+- Debounced search and composable filters.
+
+## Quick Start
+
+```tsx
+import { DataTable, useInertiaTable } from '@inertia-prime/react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+}
+
+export default function UsersIndex({ users }) {
+  const table = useInertiaTable<User>({
+    response: users,
+    route: '/users',
+  });
+
+  return (
+    <DataTable
+      {...table}
+      columns={[
+        { key: 'id', label: 'ID', sortable: true, width: 80 },
+        { key: 'name', label: 'Name', sortable: true },
+        { key: 'email', label: 'Email', sortable: true },
+        { key: 'created_at', label: 'Created', sortable: true },
+      ]}
+      emptyMessage="No users found."
+    />
+  );
+}
+```
+
+## Response Shape
+
+The server must return data matching `InertiaTableResponse<T>`:
+
+```ts
+interface InertiaTableResponse<T> {
+  data: T[];
+  meta: {
+    pagination?: {
+      current_page: number;
+      from: number | null;
+      last_page: number;
+      path: string;
+      per_page: number;
+      to: number | null;
+      total: number;
+    };
+    sort?: { column: string; direction: 'asc' | 'desc' } | null;
+    filters?: Record<string, unknown>;
+  };
+  links?: {
+    first?: string | null;
+    last?: string | null;
+    prev?: string | null;
+    next?: string | null;
+    pages?: Array<{ url: string | null; label: string; active: boolean }>;
+  };
+}
+```
+
+## useInertiaTable Hook
+
+```ts
+const table = useInertiaTable<User>({
+  response: users,          // InertiaTableResponse<User> from server
+  route: '/users',          // Route for Inertia navigation
+  paramKeys: {              // Optional: customize URL param names
+    page: 'page',
+    perPage: 'per_page',
+    sort: 'sort',
+    direction: 'direction',
+    search: 'search',
+  },
+});
+
+// Returns:
+// table.rows          - User[]
+// table.meta          - TableMeta
+// table.links         - TableLinks
+// table.sort          - TableSort | null
+// table.setSort()     - Navigate with new sort
+// table.page          - Current page number
+// table.setPage()     - Navigate to page
+// table.perPage       - Items per page
+// table.setPerPage()  - Change page size
+// table.filters       - Current filter values
+// table.setFilters()  - Navigate with new filters
+```
+`DataTable` and `useInertiaTable` coordinate to keep state in the URL:
+
+- `?page=2`
+- `?sort=name&direction=asc`
+- `?search=john`.
+
+This enables shareable links, working back/forward buttons, and state that
+survives refresh.
+
+## Laravel integration
+
+See:
+
+- [Laravel Table Requests](../laravel/table-requests)
+- [CRUD Table Example](../examples/crud-table)

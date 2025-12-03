@@ -1,0 +1,47 @@
+---
+title: "Installation"
+description: "Install Inertia Prime for Laravel + Inertia.js + React."
+---
+
+# Installation
+
+Inertia Prime has two main parts:
+
+- `@inertia-prime/react` – React components and hooks.
+- `inertia-prime/laravel` – Laravel integration helpers.
+
+## 1. Install the React package
+
+```bash
+# npm
+npm install @inertia-prime/react @inertiajs/react react react-dom
+
+# pnpm
+pnpm add @inertia-prime/react @inertiajs/react react react-dom
+```
+
+## 2. Install the Laravel package
+
+```bash
+composer require inertia-prime/laravel
+```
+
+Laravel will auto-discover the service provider. If you prefer manual registration, add it to `config/app.php`:
+
+```php
+'providers' => [
+    // ...
+    InertiaPrime\\InertiaPrimeServiceProvider::class,
+],
+```
+
+## 3. Configure the frontend
+
+Make sure your Inertia React app is set up (typically via Vite or Mix). Then import Inertia Prime where needed:
+
+```tsx
+// [TODO] Replace with actual imports once components are implemented
+import { DataTable } from '@inertia-prime/react';
+```
+
+> [TODO] Add detailed Vite + Laravel + Inertia setup instructions and example `vite.config`.

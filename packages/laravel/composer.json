@@ -1,0 +1,57 @@
+{
+  "name": "inertia-prime/laravel",
+  "description": "Laravel helpers for Inertia Prime: server-driven tables, filters, pagination, and toast notifications for Laravel + Inertia.js + React.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "inertia",
+    "inertiajs",
+    "react",
+    "datatable",
+    "pagination",
+    "filters"
+  ],
+  "authors": [
+    {
+      "name": "Inertia Prime Contributors",
+      "homepage": "https://github.com/inertia-prime/inertia-prime/contributors"
+    }
+  ],
+  "homepage": "https://github.com/inertia-prime/inertia-prime",
+  "support": {
+    "issues": "https://github.com/inertia-prime/inertia-prime/issues",
+    "source": "https://github.com/inertia-prime/inertia-prime"
+  },
+  "autoload": {
+    "psr-4": {
+      "InertiaPrime\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "InertiaPrime\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^8.1",
+    "illuminate/support": "^10.0 || ^11.0",
+    "inertiajs/inertia-laravel": "^1.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0 || ^9.0",
+    "phpunit/phpunit": "^10.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "InertiaPrime\\InertiaPrimeServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

@@ -1,0 +1,25 @@
+---
+title: "Laravel Installation"
+description: "Install and configure the Inertia Prime Laravel companion package."
+---
+
+# Laravel Installation
+
+Install the backend package:
+
+```bash
+composer require inertia-prime/laravel
+```
+
+Laravel's package auto-discovery will register the service provider. If you
+prefer manual registration:
+
+```php
+'providers' => [
+    // ...
+    InertiaPrime\\InertiaPrimeServiceProvider::class,
+],
+```
+
+> [TODO] Document configuration options in `config/inertia-prime.php` once
+> they are finalized.

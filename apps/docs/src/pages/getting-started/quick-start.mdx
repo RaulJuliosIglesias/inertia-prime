@@ -1,0 +1,57 @@
+---
+title: "Quick Start"
+description: "See how Inertia Prime fits into a typical Laravel + Inertia CRUD flow."
+---
+
+# Quick Start
+
+This guide shows how a **Users** index page might look with Inertia Prime.
+
+> Note: APIs shown here are **proposed** and may change before 1.0. All code blocks are examples only.
+
+## Controller
+
+```php
+// app/Http/Controllers/UserController.php
+
+use Inertia\\Inertia;
+use InertiaPrime\\Support\\TableBuilder; // [TODO] Planned helper
+
+public function index()
+{
+    $table = TableBuilder::for(User::query())
+        ->columns(['name', 'email', 'created_at'])
+        ->defaultSort('created_at', 'desc')
+        ->applyRequest(request());
+
+    return Inertia::render('Users/Index', [
+        'table' => $table->toResponse(),
+    ]);
+}
+```
+
+## React page
+
+```tsx
+// resources/js/Pages/Users/Index.tsx
+
+import { Head } from '@inertiajs/react';
+import { DataTable } from '@inertia-prime/react';
+import { useInertiaTable } from '@inertia-prime/react/hooks';
+
+export default function Index({ table }) {
+  const inertiaTable = useInertiaTable({
+    resource: table,
+    route: route('users.index'),
+  });
+
+  return (
+    <>
+      <Head title="Users" />
+      <DataTable {...inertiaTable} />
+    </>
+  );
+}
+```
+
+> [TODO] Expand this page with filters, bulk actions, and real-world recipes once the API is finalized.

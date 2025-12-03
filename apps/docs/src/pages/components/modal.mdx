@@ -1,0 +1,105 @@
+---
+title: "Modal"
+description: "URL-aware modals for Laravel + Inertia.js applications."
+---
+
+# Modal
+
+> Status: **Planned**
+
+URL-aware modal dialogs for forms, confirmations, and detail views.
+
+## Concepts
+
+- Modal open/close state can be synced with URL query parameters
+- This enables shareable links that open a modal directly (e.g., `/users?modal=create`)
+- Works with Inertia's history management
+- Includes focus trapping, scroll locking, and keyboard handling
+
+## Quick Start
+
+```tsx
+import { Modal, useModal } from '@inertia-prime/react';
+
+function UsersPage() {
+  const createModal = useModal({ param: 'modal', value: 'create' });
+
+  return (
+    <>
+      <button onClick={() => createModal.open()}>Create User</button>
+
+      <Modal
+        isOpen={createModal.isOpen}
+        onClose={createModal.close}
+        title="Create User"
+        size="md"
+      >
+        <CreateUserForm onSuccess={createModal.close} />
+      </Modal>
+    </>
+  );
+}
+```
+
+## useModal Hook
+
+```ts
+const modal = useModal<{ id: number }>({
+  param: 'modal',       // URL param name (default: "modal")
+  value: 'edit',        // Value when this modal is open → ?modal=edit
+  initialData: undefined,
+  onOpen: (data) => console.log('Opened with', data),
+  onClose: () => console.log('Closed'),
+});
+
+// Returns:
+// modal.isOpen     - Boolean: modal is currently open
+// modal.open(data) - Open the modal, optionally passing data
+// modal.close()    - Close the modal
+// modal.toggle()   - Toggle open/close
+// modal.data       - Data passed when opening (e.g., { id: 5 })
+```
+
+## Multiple Modals
+
+```tsx
+const createModal = useModal({ param: 'modal', value: 'create' });
+const editModal = useModal<{ id: number }>({ param: 'modal', value: 'edit' });
+
+// Open create: ?modal=create
+// Open edit:   ?modal=edit&id=5
+
+<button onClick={() => editModal.open({ id: user.id })}>Edit</button>
+```
+
+## Modal Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isOpen` | `boolean` | required | Whether the modal is visible |
+| `onClose` | `() => void` | required | Called when modal should close |
+| `title` | `string` | — | Header title |
+| `description` | `string` | — | Subtitle below title |
+| `size` | `ModalSize` | `"md"` | `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| `"full"` |
+| `closeOnOverlayClick` | `boolean` | `true` | Close when clicking backdrop |
+| `closeOnEscape` | `boolean` | `true` | Close when pressing Escape |
+| `showCloseButton` | `boolean` | `true` | Show X button in header |
+| `footer` | `ReactNode` | — | Footer content (action buttons) |
+
+## SlideOver
+
+For side panels, use `SlideOver` with the same API:
+
+```tsx
+import { SlideOver, useModal } from '@inertia-prime/react';
+
+const panel = useModal({ param: 'panel', value: 'details' });
+
+<SlideOver
+  isOpen={panel.isOpen}
+  onClose={panel.close}
+  title="User Details"
+  position="right"
+>
+  <UserDetails user={panel.data} />
+</SlideOver>

@@ -1,0 +1,105 @@
+---
+title: "Form"
+description: "Inertia-aware forms with Laravel validation integration."
+---
+
+# Form
+
+> Status: **Planned**
+
+Inertia-aware form components that integrate with Laravel validation.
+
+## Concepts
+
+- `useInertiaForm` wraps Inertia's `useForm` with additional helpers
+- `<Form>` component provides context to child fields
+- Validation errors are automatically displayed per-field
+
+## Quick Start
+
+```tsx
+import { Form, FormField, TextField, useInertiaForm } from '@inertia-prime/react';
+
+interface CreateUserData {
+  name: string;
+  email: string;
+}
+
+function CreateUser() {
+  const form = useInertiaForm<CreateUserData>({
+    initialValues: { name: '', email: '' },
+  });
+
+  return (
+    <Form
+      form={form}
+      action="/users"
+      method="post"
+      onSuccess={() => console.log('User created!')}
+    >
+      <FormField name="name" label="Name" required>
+        <TextField placeholder="Enter name" />
+      </FormField>
+
+      <FormField name="email" label="Email" required>
+        <TextField type="email" placeholder="Enter email" />
+      </FormField>
+
+      <button type="submit" disabled={form.processing}>
+        {form.processing ? 'Saving...' : 'Create User'}
+      </button>
+    </Form>
+  );
+}
+```
+
+## useInertiaForm Hook
+
+```ts
+const form = useInertiaForm<CreateUserData>({
+  initialValues: { name: '', email: '' },
+  errorBag: 'createUser',  // Optional: for multiple forms on one page
+});
+
+// Returns:
+// form.data            - Current form values
+// form.setData()       - Update field(s)
+// form.errors          - Validation errors from Laravel
+// form.hasErrors       - Boolean: any errors present
+// form.processing      - Boolean: submission in progress
+// form.wasSuccessful   - Boolean: last submit succeeded
+// form.reset()         - Reset form to initial values
+// form.clearErrors()   - Clear specific or all errors
+// form.submit()        - Submit form programmatically
+```
+
+## Form Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `form` | `FormState<T>` | required | Form state from `useInertiaForm` |
+| `action` | `string` | required | URL to submit to |
+| `method` | `FormMethod` | `"post"` | HTTP method |
+| `onBeforeSubmit` | `() => boolean \| void` | — | Return `false` to cancel |
+| `onSuccess` | `() => void` | — | Called after successful submission |
+| `onError` | `(errors) => void` | — | Called after failed submission |
+| `preserveScroll` | `boolean` | `false` | Keep scroll position after submit |
+| `preserveState` | `boolean` | `false` | Keep component state after submit |
+
+## Laravel Controller
+
+```php
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'unique:users'],
+    ]);
+
+    User::create($validated);
+
+    return redirect()->route('users.index');
+}
+```
+
+Validation errors are automatically passed back to the form via Inertia.

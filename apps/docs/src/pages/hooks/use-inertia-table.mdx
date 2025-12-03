@@ -1,0 +1,119 @@
+---
+title: "useInertiaTable"
+description: "Hook for managing table state with URL synchronization."
+---
+
+# useInertiaTable
+
+> Status: **Planned**
+
+A hook that manages server-driven table state with URL synchronization.
+
+## Features
+
+- Reads paginated data from Inertia props
+- Manages sorting, filtering, and pagination state
+- Syncs state to URL query parameters
+- Triggers Inertia navigation on state changes
+- Full TypeScript support with generics
+
+## Usage
+
+```tsx
+import { DataTable, useInertiaTable } from '@inertia-prime/react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export default function UsersIndex({ users }) {
+  const table = useInertiaTable<User>({
+    response: users,
+    route: '/users',
+  });
+
+  return <DataTable {...table} columns={[...]} />;
+}
+```
+
+## Options
+
+```ts
+interface UseInertiaTableOptions<TData> {
+  // Server response matching InertiaTableResponse<TData>
+  response: InertiaTableResponse<TData>;
+
+  // Route name or URL for navigation
+  route: string;
+
+  // Optional: customize URL param names
+  paramKeys?: {
+    page?: string;      // default: "page"
+    perPage?: string;   // default: "per_page"
+    sort?: string;      // default: "sort"
+    direction?: string; // default: "direction"
+    search?: string;    // default: "search"
+  };
+}
+```
+
+## Return Value
+
+```ts
+interface UseInertiaTableResult<TData> {
+  // Data
+  rows: TData[];
+  meta: TableMeta;
+  links?: TableLinks;
+
+  // Sorting
+  sort: TableSort | null;
+  setSort: (sort: TableSort | null) => void;
+
+  // Pagination
+  page: number;
+  setPage: (page: number) => void;
+  perPage: number;
+  setPerPage: (perPage: number) => void;
+
+  // Filters
+  filters: Record<string, unknown>;
+  setFilters: (filters: Record<string, unknown>) => void;
+}
+```
+
+## How It Works
+
+1. **Initial render**: Hook reads state from `response.meta`
+2. **User interaction**: `setSort()`, `setPage()`, etc. are called
+3. **URL update**: Hook navigates via Inertia with new query params
+4. **Server response**: Laravel returns new data matching the request
+5. **Re-render**: Hook reads new state from updated `response`
+
+## Example: Custom Filters
+
+```tsx
+const table = useInertiaTable<User>({
+  response: users,
+  route: '/users',
+});
+
+// Apply a filter
+table.setFilters({ status: 'active', role: 'admin' });
+// → navigates to /users?filter[status]=active&filter[role]=admin
+
+// Change sort
+table.setSort({ column: 'name', direction: 'asc' });
+// → navigates to /users?sort=name&direction=asc
+
+// Change page
+table.setPage(2);
+// → navigates to /users?page=2
+```
+
+## Related
+
+- [DataTable Component](../components/data-table)
+- [Laravel Table Requests](../laravel/table-requests)

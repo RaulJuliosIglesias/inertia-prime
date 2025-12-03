@@ -1,0 +1,44 @@
+---
+title: "Theming"
+description: "Customize the look and feel of Inertia Prime with Tailwind and design tokens."
+---
+
+# Theming
+
+Inertia Prime ships with **Tailwind-first** styling and a set of design tokens.
+
+## Theme goals
+
+- Sensible defaults out of the box.
+- Easy to adapt to your existing Tailwind config.
+- Optional headless usage for full visual control.
+
+## Tailwind configuration
+
+> [TODO] Document the recommended Tailwind configuration once components ship.
+
+A high-level example:
+
+```js
+// tailwind.config.js
+module.exports = {
+  content: [
+    './resources/js/**/*.{ts,tsx}',
+    './vendor/inertia-prime/**/*.blade.php', // [TODO] if needed
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // [TODO] Inertia Prime tokens
+      },
+    },
+  },
+};
+```
+
+## Headless vs styled
+
+- **Styled components**: ready-to-use components with Tailwind classes.
+- **Headless components/hooks**: behavior only, you bring the HTML & CSS.
+
+> [TODO] Show side-by-side examples of styled vs headless usage for DataTable and Form.
