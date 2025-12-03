@@ -60,12 +60,14 @@ export function fromInertiaTable<TData>(
   result: UseInertiaTableResult<TData>,
   columns: DataTableColumn<TData>[]
 ): DataTableProps<TData> {
+  const total = result.meta.pagination?.total ?? result.rows.length;
+
   return {
-    data: result.data,
+    data: result.rows,
     columns,
     page: result.page,
     perPage: result.perPage,
-    total: result.total,
+    total,
     sort: result.sort,
     filters: result.filters,
     search: result.search,
@@ -74,6 +76,7 @@ export function fromInertiaTable<TData>(
     onSortChange: result.setSort,
     onFiltersChange: result.setFilters,
     onSearchChange: result.setSearch,
+    isLoading: result.isLoading,
   };
 }
 
