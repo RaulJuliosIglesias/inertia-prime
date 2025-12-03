@@ -92,7 +92,8 @@ export function useInertiaForm<TForm extends Record<string, unknown>>(
   const { initialValues, transform } = options;
 
   // Use Inertia's useForm (cast to bypass strict generic constraints)
-  const inertiaForm = useForm(initialValues as Record<string, unknown>) as ReturnType<typeof useForm> & { data: TForm };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const inertiaForm = useForm(initialValues as any) as any;
 
   // Apply transform if provided
   if (transform) {
