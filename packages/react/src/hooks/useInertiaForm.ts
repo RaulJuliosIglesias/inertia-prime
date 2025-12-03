@@ -91,8 +91,8 @@ export function useInertiaForm<TForm extends Record<string, unknown>>(
 ): UseInertiaFormReturn<TForm> {
   const { initialValues, transform } = options;
 
-  // Use Inertia's useForm
-  const inertiaForm = useForm<TForm>(initialValues);
+  // Use Inertia's useForm (cast to bypass strict generic constraints)
+  const inertiaForm = useForm(initialValues as Record<string, unknown>) as ReturnType<typeof useForm> & { data: TForm };
 
   // Apply transform if provided
   if (transform) {
@@ -116,7 +116,7 @@ export function useInertiaForm<TForm extends Record<string, unknown>>(
         }));
       } else {
         // Field/value form
-        inertiaForm.setData(fieldOrValuesOrCallback, value as TForm[keyof TForm]);
+        inertiaForm.setData(fieldOrValuesOrCallback as string, value);
       }
     },
     [inertiaForm]
