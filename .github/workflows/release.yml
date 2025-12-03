@@ -8,6 +8,7 @@ on:
 
 jobs:
   release:
+    name: Create Release
     runs-on: ubuntu-latest
 
     permissions:
@@ -30,10 +31,19 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: pnpm install
+        working-directory: packages/react
+        run: pnpm install --ignore-workspace
 
       - name: Build
-        run: pnpm --filter @inertia-prime/react build
+        working-directory: packages/react
+        run: pnpm build
+
+      - name: Publish to npm
+        working-directory: packages/react
+        run: pnpm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1

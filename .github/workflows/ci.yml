@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  ci:
+  build-react:
+    name: Build React Package
     runs-on: ubuntu-latest
 
     steps:
@@ -24,12 +25,23 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies (packages only)
-        run: pnpm install --filter "@inertia-prime/*"
-
-      - name: Build React package
+      - name: Install dependencies
         working-directory: packages/react
+        run: pnpm install --ignore-workspace
+
+      - name: Build
+        working-directory: packages/react
+        run: pnpm build
+
+  validate-laravel:
+    name: Validate Laravel Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate composer.json
+        working-directory: packages/laravel
         run: |
-          pnpm install
-          pnpm build
-        continue-on-error: true
+          composer validate --strict

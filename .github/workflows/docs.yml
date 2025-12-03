@@ -10,6 +10,7 @@ on:
 
 jobs:
   docs:
+    name: Build Documentation
     runs-on: ubuntu-latest
 
     steps:
@@ -26,9 +27,10 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install dependencies
+        working-directory: apps/docs
+        run: pnpm install --ignore-workspace
+
       - name: Build docs
         working-directory: apps/docs
-        run: |
-          pnpm install || true
-          pnpm build || true
-        continue-on-error: true
+        run: pnpm build
