@@ -259,8 +259,13 @@ We welcome issues, pull requests, and discussions.
 
 ## Credits
 
-- Inspired by **Laravel**, **Inertia.js**, **shadcn/ui**, and the broader React/Laravel communities.
-- Maintainers: [TODO: add maintainers]
+Created by **Raúl Iglesias** ([@rauliglesiasruiz](https://github.com/rauliglesiasruiz))
+
+Inspired by **Laravel**, **Inertia.js**, **shadcn/ui**, and the broader React/Laravel communities.
+
+### Maintainers
+
+- **Raúl Iglesias** - Creator & Lead Maintainer
 
 ## License
 

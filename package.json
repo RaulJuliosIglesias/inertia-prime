@@ -4,6 +4,10 @@
   "private": true,
   "description": "Production-ready React component library for Laravel + Inertia.js applications.",
   "license": "MIT",
+  "author": {
+    "name": "Raúl Iglesias",
+    "url": "https://github.com/rauliglesiasruiz"
+  },
   "scripts": {
     "dev": "turbo run dev",
     "dev:docs": "turbo run dev --filter=docs",
@@ -21,12 +25,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/inertia-prime/inertia-prime.git"
+    "url": "https://github.com/rauliglesiasruiz/inertia-prime.git"
   },
   "bugs": {
-    "url": "https://github.com/inertia-prime/inertia-prime/issues"
+    "url": "https://github.com/rauliglesiasruiz/inertia-prime/issues"
   },
-  "homepage": "https://github.com/inertia-prime/inertia-prime#readme",
+  "homepage": "https://github.com/rauliglesiasruiz/inertia-prime#readme",
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
     "turbo": "^2.0.0",

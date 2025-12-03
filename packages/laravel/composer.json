@@ -14,14 +14,15 @@
   ],
   "authors": [
     {
-      "name": "Inertia Prime Contributors",
-      "homepage": "https://github.com/inertia-prime/inertia-prime/contributors"
+      "name": "Raúl Iglesias",
+      "homepage": "https://github.com/rauliglesiasruiz",
+      "role": "Creator & Lead Maintainer"
     }
   ],
-  "homepage": "https://github.com/inertia-prime/inertia-prime",
+  "homepage": "https://github.com/rauliglesiasruiz/inertia-prime",
   "support": {
-    "issues": "https://github.com/inertia-prime/inertia-prime/issues",
-    "source": "https://github.com/inertia-prime/inertia-prime"
+    "issues": "https://github.com/rauliglesiasruiz/inertia-prime/issues",
+    "source": "https://github.com/rauliglesiasruiz/inertia-prime"
   },
   "autoload": {
     "psr-4": {

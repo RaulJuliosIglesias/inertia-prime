@@ -3,15 +3,24 @@
   "version": "0.1.0",
   "description": "Production-ready React components and hooks for Laravel + Inertia.js applications. Server-driven tables, forms, modals, and more.",
   "license": "MIT",
-  "author": "Inertia Prime Contributors",
-  "homepage": "https://github.com/inertia-prime/inertia-prime",
+  "author": {
+    "name": "Raúl Iglesias",
+    "url": "https://github.com/rauliglesiasruiz"
+  },
+  "maintainers": [
+    {
+      "name": "Raúl Iglesias",
+      "url": "https://github.com/rauliglesiasruiz"
+    }
+  ],
+  "homepage": "https://github.com/rauliglesiasruiz/inertia-prime",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/inertia-prime/inertia-prime.git",
+    "url": "git+https://github.com/rauliglesiasruiz/inertia-prime.git",
     "directory": "packages/react"
   },
   "bugs": {
-    "url": "https://github.com/inertia-prime/inertia-prime/issues"
+    "url": "https://github.com/rauliglesiasruiz/inertia-prime/issues"
   },
   "keywords": [
     "react",
