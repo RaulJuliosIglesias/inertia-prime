@@ -1,5 +1,7 @@
 // InertiaPrimeProvider: global provider for Inertia Prime.
 
+import type { ReactNode } from "react";
+
 /**
  * Theme configuration for Inertia Prime components.
  */
@@ -17,7 +19,7 @@ export interface InertiaPrimeTheme {
  */
 export interface InertiaPrimeProviderProps {
   /** Application content. */
-  children?: unknown;
+  children?: ReactNode;
   /** Theme configuration. */
   theme?: InertiaPrimeTheme;
   /** Default route used by useInertiaTable when not specified. */

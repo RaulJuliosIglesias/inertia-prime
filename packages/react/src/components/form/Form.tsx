@@ -1,6 +1,6 @@
 // Form: Inertia-aware form wrapper component.
 
-import { createContext, useContext, useCallback } from "react";
+import { createContext, useContext, useCallback, type ReactNode } from "react";
 import type { UseInertiaFormReturn } from "../../hooks/useInertiaForm";
 
 /** Supported HTTP method keywords. */
@@ -31,7 +31,7 @@ export interface FormProps<TForm extends Record<string, unknown> = Record<string
   /** HTTP method. @default "post" */
   method?: FormMethod;
   /** Form contents. */
-  children?: unknown;
+  children?: ReactNode;
   /** Called before submission. Return false to cancel. */
   onBeforeSubmit?: () => boolean | void;
   /** Called after a successful submission. */
