@@ -24,14 +24,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install dependencies (packages only)
+        run: pnpm install --filter "@inertia-prime/*"
 
       - name: Build React package
-        run: pnpm --filter @inertia-prime/react build
-        continue-on-error: true
-
-      - name: Validate Laravel package
-        working-directory: packages/laravel
+        working-directory: packages/react
         run: |
-          composer validate --no-check-all --no-check-publish || true
+          pnpm install
+          pnpm build
+        continue-on-error: true

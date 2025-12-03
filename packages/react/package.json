@@ -5,22 +5,22 @@
   "license": "MIT",
   "author": {
     "name": "Raúl Iglesias",
-    "url": "https://github.com/rauliglesiasruiz"
+    "url": "https://github.com/RaulJuliosIglesias"
   },
   "maintainers": [
     {
       "name": "Raúl Iglesias",
-      "url": "https://github.com/rauliglesiasruiz"
+      "url": "https://github.com/RaulJuliosIglesias"
     }
   ],
-  "homepage": "https://github.com/rauliglesiasruiz/inertia-prime",
+  "homepage": "https://github.com/RaulJuliosIglesias/inertia-prime",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rauliglesiasruiz/inertia-prime.git",
+    "url": "git+https://github.com/RaulJuliosIglesias/inertia-prime.git",
     "directory": "packages/react"
   },
   "bugs": {
-    "url": "https://github.com/rauliglesiasruiz/inertia-prime/issues"
+    "url": "https://github.com/RaulJuliosIglesias/inertia-prime/issues"
   },
   "keywords": [
     "react",

@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": {
     "name": "Raúl Iglesias",
-    "url": "https://github.com/rauliglesiasruiz"
+    "url": "https://github.com/RaulJuliosIglesias"
   },
   "scripts": {
     "dev": "turbo run dev",
@@ -25,12 +25,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rauliglesiasruiz/inertia-prime.git"
+    "url": "https://github.com/RaulJuliosIglesias/inertia-prime.git"
   },
   "bugs": {
-    "url": "https://github.com/rauliglesiasruiz/inertia-prime/issues"
+    "url": "https://github.com/RaulJuliosIglesias/inertia-prime/issues"
   },
-  "homepage": "https://github.com/rauliglesiasruiz/inertia-prime#readme",
+  "homepage": "https://github.com/RaulJuliosIglesias/inertia-prime#readme",
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
     "turbo": "^2.0.0",

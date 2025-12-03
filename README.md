@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@inertia-prime/react"><img src="https://img.shields.io/npm/v/@inertia-prime/react.svg?label=@inertia-prime/react&color=blue" alt="npm" /></a>
   <a href="https://packagist.org/packages/inertia-prime/laravel"><img src="https://img.shields.io/packagist/v/inertia-prime/laravel.svg?label=inertia-prime/laravel&color=blue" alt="packagist" /></a>
-  <a href="https://github.com/rauliglesiasruiz/inertia-prime/actions/workflows/ci.yml"><img src="https://github.com/rauliglesiasruiz/inertia-prime/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/RaulJuliosIglesias/inertia-prime/actions/workflows/ci.yml"><img src="https://github.com/RaulJuliosIglesias/inertia-prime/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="license" /></a>
 </p>
 
@@ -259,7 +259,7 @@ We welcome issues, pull requests, and discussions.
 
 ## Credits
 
-Created by **Raúl Iglesias** ([@rauliglesiasruiz](https://github.com/rauliglesiasruiz))
+Created by **Raúl Iglesias** ([@RaulJuliosIglesias](https://github.com/RaulJuliosIglesias))
 
 Inspired by **Laravel**, **Inertia.js**, **shadcn/ui**, and the broader React/Laravel communities.
 

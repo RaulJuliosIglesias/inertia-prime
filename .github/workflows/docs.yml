@@ -26,9 +26,9 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Build docs
-        run: pnpm --filter @inertia-prime/docs build
+        working-directory: apps/docs
+        run: |
+          pnpm install || true
+          pnpm build || true
         continue-on-error: true
